@@ -7,5 +7,5 @@ resource "aws_vpc" "vpc" {
 
   assign_generated_ipv6_cidr_block = var.ipv6_cidr_block
 
-  tags = merge(var.tags, { Name = var.name })
+  tags = merge(var.tags, { Name = "${local.derived_prefix}-vpc" })
 }

@@ -3,6 +3,12 @@ variable "name" {
   description = "VPC name."
 }
 
+variable "environment" {
+  type        = string
+  description = "Name of the environment for which the VPC is used. Leave empty if no environment name is desired."
+  default     = ""
+}
+
 variable "main_cidr_block" {
   type        = string
   description = "Main IPv4 CIDR block for the VPC."
@@ -40,6 +46,11 @@ variable "ipv6_cidr_block" {
   type        = bool
   description = "Whether to request an Amazon-provider IPv6 CIDR block with /56 prefix length for the VPC."
   default     = false
+
+  validation {
+    condition     = !var.ipv6_cidr_block
+    error_message = "IPv6 is not yet supported."
+  }
 }
 
 variable "availability_zones_count" {
