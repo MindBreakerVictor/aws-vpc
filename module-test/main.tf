@@ -4,7 +4,9 @@ module "vpc" {
   name                     = "modtest"
   main_cidr_block          = "10.0.0.0/24"
   availability_zones_count = 4
-  subnetting_algorithm     = var.subnetting_algorithm
+
+  subnetting_algorithm = var.subnetting_algorithm
+  only_private_subnets = var.only_private_subnets
 
   tags = local.common_tags
 
@@ -19,7 +21,9 @@ module "vpc_six_azs" {
   name                     = "modtest_six_azs"
   main_cidr_block          = "10.0.1.0/24"
   availability_zones_count = 6
-  subnetting_algorithm     = var.subnetting_algorithm
+
+  subnetting_algorithm = var.subnetting_algorithm
+  only_private_subnets = var.only_private_subnets
 
   tags = local.common_tags
 
@@ -34,7 +38,9 @@ module "vpc_ireland" {
   name                     = "modtest"
   main_cidr_block          = "10.0.2.0/24"
   availability_zones_count = 6
-  subnetting_algorithm     = var.subnetting_algorithm
+
+  subnetting_algorithm = var.subnetting_algorithm
+  only_private_subnets = var.only_private_subnets
 
   tags = local.common_tags
 
@@ -52,38 +58,50 @@ locals {
 }
 
 # Outputs
-# output "azs_count" {
+# output "nv_azs_count" {
 #   value = module.vpc.azs_count
 # }
 
-output "subnet_addresses" {
-  value = module.vpc.subnet_addresses
+output "nv_private_subnet_addresses" {
+  value = module.vpc.private_subnet_addresses
 }
 
-output "unused_subnet_addresses" {
+output "nv_public_subnet_addresses" {
+  value = module.vpc.public_subnet_addresses
+}
+
+output "nv_unused_subnet_addresses" {
   value = module.vpc.unused_subnet_addresses
 }
 
-# output "azs_count_six_azs" {
+# output "six_azs_azs_count" {
 #   value = module.vpc_six_azs.azs_count
 # }
 
-output "subnet_addresses_six_azs" {
-  value = module.vpc_six_azs.subnet_addresses
+output "six_azs_private_subnet_addresses" {
+  value = module.vpc_six_azs.private_subnet_addresses
 }
 
-output "unused_subnet_addresses_six_azs" {
+output "six_azs_public_subnet_addresses" {
+  value = module.vpc_six_azs.public_subnet_addresses
+}
+
+output "six_azs_unused_subnet_addresses" {
   value = module.vpc_six_azs.unused_subnet_addresses
 }
 
-# output "azs_count_ireland" {
+# output "ireland_azs_count" {
 #   value = module.vpc_ireland.azs_count
 # }
 
-output "subnet_addresses_ireland" {
-  value = module.vpc_ireland.subnet_addresses
+output "ireland_private_subnet_addresses" {
+  value = module.vpc_ireland.private_subnet_addresses
 }
 
-output "unused_subnet_addresses_ireland" {
+output "ireland_public_subnet_addresses" {
+  value = module.vpc_ireland.public_subnet_addresses
+}
+
+output "ireland_unused_subnet_addresses" {
   value = module.vpc_ireland.unused_subnet_addresses
 }

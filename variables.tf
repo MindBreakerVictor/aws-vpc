@@ -67,6 +67,12 @@ EOF
   }
 }
 
+variable "only_private_subnets" {
+  type        = bool
+  description = "Whether to create only private subnets from VPC IPv4 CIDR block."
+  default     = false
+}
+
 variable "tags" {
   type        = map(string)
   description = "Common tags for all resources created by this module. Reserved tag keys: Name, net/type"
