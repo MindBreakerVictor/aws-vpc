@@ -9,3 +9,16 @@ resource "aws_vpc" "vpc" {
 
   tags = merge(var.tags, { Name = "${local.derived_prefix}-vpc" })
 }
+
+# Delete rules from VPC's default Network ACL & Security Group and delete routes from default Route Table
+resource "aws_default_network_acl" "acl" {
+  default_network_acl_id = aws_vpc.vpc.default_network_acl_id
+}
+
+resource "aws_default_security_group" "sg" {
+  vpc_id = aws_vpc.vpc.id
+}
+
+resource "aws_default_route_table" "rtb" {
+  default_route_table_id = aws_vpc.vpc.default_route_table_id
+}
