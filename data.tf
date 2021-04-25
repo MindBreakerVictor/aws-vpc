@@ -4,7 +4,7 @@ locals {
   ### Private locals - Helpers for defining other locals
   _azs           = data.aws_availability_zones.available.names
   _azs_count     = min(var.availability_zones_count, length(local._azs))
-  _subnets_count = local._azs_count * (var.only_private_subnets ? 1 : 2)
+  _subnets_count = local._azs_count * (var.private_subnets_only ? 1 : 2)
 
   _smallest_bits_to_extend_the_prefix               = floor(log(local._subnets_count, 2)) # Greatest value N for which 2 ^ N is smaller than the number of subnets
   _greatest_bits_to_extend_the_prefix               = ceil(log(local._subnets_count, 2)) # Smallest value N for which 2 ^ N is bigger than the number of subnets

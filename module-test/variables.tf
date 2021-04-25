@@ -3,7 +3,7 @@ variable "subnetting_algorithm" {
   default = "nowaste"
 }
 
-variable "only_private_subnets" {
+variable "private_subnets_only" {
   type    = bool
   default = false
 }

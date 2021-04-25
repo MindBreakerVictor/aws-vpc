@@ -67,7 +67,7 @@ EOF
   }
 }
 
-variable "only_private_subnets" {
+variable "private_subnets_only" {
   type        = bool
   description = "Whether to create only private subnets from VPC IPv4 CIDR block."
   default     = false

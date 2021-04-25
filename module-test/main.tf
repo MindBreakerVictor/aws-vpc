@@ -6,7 +6,7 @@ module "vpc" {
   availability_zones_count = 4
 
   subnetting_algorithm = var.subnetting_algorithm
-  only_private_subnets = var.only_private_subnets
+  private_subnets_only = var.private_subnets_only
 
   tags = local.common_tags
 
@@ -23,7 +23,7 @@ module "vpc_six_azs" {
   availability_zones_count = 6
 
   subnetting_algorithm = var.subnetting_algorithm
-  only_private_subnets = var.only_private_subnets
+  private_subnets_only = var.private_subnets_only
 
   tags = local.common_tags
 
@@ -40,7 +40,7 @@ module "vpc_ireland" {
   availability_zones_count = 6
 
   subnetting_algorithm = var.subnetting_algorithm
-  only_private_subnets = var.only_private_subnets
+  private_subnets_only = var.private_subnets_only
 
   tags = local.common_tags
 
