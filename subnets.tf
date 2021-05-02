@@ -28,7 +28,7 @@ resource "aws_subnet" "private_subnets" {
 }
 
 resource "aws_subnet" "public_subnets" {
-  for_each = {
+  for_each = var.private_subnets_only ? {} : {
     for i in range(0, local.azs_count) : local.availability_zones[i] => {
       index      = i + 1
       cidr_block = module.subnet_addresses.public_subnet_addresses[i]

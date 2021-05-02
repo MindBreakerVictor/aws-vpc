@@ -10,4 +10,7 @@ Terraform module for AWS Virtual Private Cloud (VPC).
 - [ ] Internet Gateway
 - [ ] NAT Gateways & Elastic IPs
 - [ ] S3 & DynamoDB gateway endpoints
+- [ ] Flow logs
 - [ ] Unit tests using Golang & GitHub Pipelines
+- [ ] Multiple IPv4 CIDR blocks support
+- [ ] IPv6 support
