@@ -1,4 +1,6 @@
 module "vpc" {
+  count = local.nv_vpc ? 1 : 0
+
   source = "../"
 
   name                     = "modtest"
@@ -16,6 +18,8 @@ module "vpc" {
 }
 
 module "vpc_six_azs" {
+  count = local.nv_six_azs_vpc ? 1 : 0
+
   source = "../"
 
   name                     = "modtest_six_azs"
@@ -46,11 +50,14 @@ module "vpc_ireland" {
 
   providers = {
     aws = aws.ireland
-   }
+  }
 }
 
 # Locals
 locals {
+  nv_vpc         = false
+  nv_six_azs_vpc = false
+
   common_tags = {
     Role = "Terraform Module aws-vpc Test"
     User = "victor611@yahoo.com"
@@ -63,15 +70,15 @@ locals {
 # }
 
 output "nv_private_subnet_addresses" {
-  value = module.vpc.private_subnet_addresses
+  value = local.nv_vpc ? module.vpc.private_subnet_addresses : []
 }
 
 output "nv_public_subnet_addresses" {
-  value = module.vpc.public_subnet_addresses
+  value = local.nv_vpc ? module.vpc.public_subnet_addresses : []
 }
 
 output "nv_unused_subnet_addresses" {
-  value = module.vpc.unused_subnet_addresses
+  value = local.nv_vpc ? module.vpc.unused_subnet_addresses : []
 }
 
 # output "six_azs_azs_count" {
@@ -79,15 +86,15 @@ output "nv_unused_subnet_addresses" {
 # }
 
 output "six_azs_private_subnet_addresses" {
-  value = module.vpc_six_azs.private_subnet_addresses
+  value = local.nv_six_azs_vpc ? module.vpc_six_azs.private_subnet_addresses : []
 }
 
 output "six_azs_public_subnet_addresses" {
-  value = module.vpc_six_azs.public_subnet_addresses
+  value = local.nv_six_azs_vpc ? module.vpc_six_azs.public_subnet_addresses : []
 }
 
 output "six_azs_unused_subnet_addresses" {
-  value = module.vpc_six_azs.unused_subnet_addresses
+  value = local.nv_six_azs_vpc ? module.vpc_six_azs.unused_subnet_addresses : []
 }
 
 # output "ireland_azs_count" {
@@ -105,3 +112,7 @@ output "ireland_public_subnet_addresses" {
 output "ireland_unused_subnet_addresses" {
   value = module.vpc_ireland.unused_subnet_addresses
 }
+
+# output "defaults" {
+#   value = module.vpc_ireland.defaults
+# }
