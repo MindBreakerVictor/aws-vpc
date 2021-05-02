@@ -120,8 +120,8 @@ variable "nat_gateway_setup" {
   default     = "ha"
 
   validation {
-    condition     = contains(["failover", "ha"], var.nat_gateway_setup)
-    error_message = "NAT Gateway setups available are: failover, ha."
+    condition     = contains(["one-az", "failover", "ha"], var.nat_gateway_setup)
+    error_message = "NAT Gateway setups available are: one-az, failover, ha."
   }
 }
 
