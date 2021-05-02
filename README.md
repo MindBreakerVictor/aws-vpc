@@ -6,9 +6,9 @@ Terraform module for AWS Virtual Private Cloud (VPC).
 - [x] VPC & Subnets
 - [x] Delete rules from VPC default Network ACL & Security Group
 - [x] Custom public & private Network ACLs
-- [ ] Custom public & private Route Tables
-- [ ] Internet Gateway
-- [ ] NAT Gateways & Elastic IPs
+- [x] Custom public & private Route Tables
+- [x] Internet Gateway
+- [x] NAT Gateways & Elastic IPs
 - [ ] S3 & DynamoDB gateway endpoints
 - [ ] Flow logs
 - [ ] Unit tests using Golang & GitHub Pipelines

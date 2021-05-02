@@ -113,6 +113,24 @@ variable "public_nacl_rules" {
   default     = {}
 }
 
+# NAT Gateways & Internet Gateway
+variable "nat_gateway_setup" {
+  type        = string
+  description = "NAT Gateway setup. Available options: failover, ha"
+  default     = "ha"
+
+  validation {
+    condition     = contains(["failover", "ha"], var.nat_gateway_setup)
+    error_message = "NAT Gateway setups available are: failover, ha."
+  }
+}
+
+variable "force_internet_gateway" {
+  type        = bool
+  description = "Force creation of an Internet Gateway for a VPC with only private subnets. Required if an AWS Global Accelerator is pointing to a private resource in the VPC."
+  default     = false
+}
+
 variable "tags" {
   type        = map(string)
   description = "Common tags for all resources created by this module. Reserved tag keys: Name, net/type"

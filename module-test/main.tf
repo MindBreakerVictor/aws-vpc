@@ -45,6 +45,7 @@ module "vpc_ireland" {
 
   subnetting_algorithm = var.subnetting_algorithm
   private_subnets_only = var.private_subnets_only
+  nat_gateway_setup    = var.nat_gateway_setup
 
   tags = local.common_tags
 
