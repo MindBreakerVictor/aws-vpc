@@ -12,3 +12,8 @@ variable "nat_gateway_setup" {
   type    = string
   default = "ha"
 }
+
+variable "flow_logs_config" {
+  type    = any
+  default = {}
+}

@@ -131,6 +131,35 @@ variable "force_internet_gateway" {
   default     = false
 }
 
+# VPC Flow Logs
+variable "flow_logs_config" {
+  type        = any  # Because map values have different types.
+  description = <<EOF
+Config block for VPC Flow Logs. It must be a map with the following optional keys: destination, retention, aggregation_interval, kms_key_id.
+
+Keys values:
+  destination          => "cloud-watch-logs" or "s3"
+                          Default: "cloud-watch-logs"
+  retention            => 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653, 0 (indefinetely)
+                          Default: 30 (days)
+  aggregation_interval => 60 or 600
+                          Default: 600
+  kms_key_id           => ARN of a CMK in AWS KMS
+                          Default: AWS managed key
+
+Pass this as null to disable flow logs.
+EOF
+  default     = {}
+
+  validation {
+    condition     = length([
+      for k in keys(var.flow_logs_config) : true
+      if contains(["destination", "retention", "aggregation_interval", "kms_key_id"], k)
+    ]) == length(var.flow_logs_config)
+    error_message = "Invalid key present in flow logs config."
+  }
+}
+
 variable "tags" {
   type        = map(string)
   description = "Common tags for all resources created by this module. Reserved tag keys: Name, net/type"
