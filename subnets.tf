@@ -7,7 +7,7 @@ module "subnet_addresses" {
   subnetting_algorithm = var.subnetting_algorithm
 }
 
-resource "aws_subnet" "private_subnets" {
+resource "aws_subnet" "private" {
   for_each = {
     for i in range(0, local.azs_count) : local.availability_zones[i] => {
       index      = i + 1
@@ -27,7 +27,7 @@ resource "aws_subnet" "private_subnets" {
   })
 }
 
-resource "aws_subnet" "public_subnets" {
+resource "aws_subnet" "public" {
   for_each = var.private_subnets_only ? {} : {
     for i in range(0, local.azs_count) : local.availability_zones[i] => {
       index      = i + 1

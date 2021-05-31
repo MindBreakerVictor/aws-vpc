@@ -8,7 +8,7 @@ variable "vpc_id" {
   description = "VPC ID to create Flow Logs for."
 
   validation {
-    condition     = length(regexall("^vpc-\\d{12}", var.vpc_id)) > 0
+    condition     = length(regexall("^vpc-(?:[0-9a-f]{8}|[0-9a-f]{17})$", var.vpc_id)) > 0
     error_message = "Invalid VPC ID."
   }
 }

@@ -11,8 +11,8 @@ resource "aws_eip" "nat" {
 resource "aws_nat_gateway" "nat" {
   for_each = toset(local.nat_gateway_azs)
 
-  subnet_id     = aws_subnet.public_subnets[each.key].id
-  allocation_id = aws_eip.nat[each.key].allocation_id
+  subnet_id     = aws_subnet.public[each.key].id
+  allocation_id = aws_eip.nat[each.key].id
 
   tags = merge(var.tags, { Name = "${local.derived_prefix}-nat-${each.value}" })
 }

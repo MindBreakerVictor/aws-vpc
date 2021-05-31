@@ -7,7 +7,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table" "private" {
-  for_each = !var.private_subnets_only && var.nat_gateway_setup == "ha" ? toset(local.availability_zones) : toset([""])
+  for_each = !var.private_subnets_only && var.nat_gateway_setup == "ha" ? toset(local.availability_zones) : toset(["private"])
 
   vpc_id = aws_vpc.vpc.id
 

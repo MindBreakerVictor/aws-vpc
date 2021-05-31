@@ -1,6 +1,6 @@
 resource "aws_network_acl" "private" {
   vpc_id     = aws_vpc.vpc.id
-  subnet_ids = [for subnet in aws_subnet.private_subnets : subnet.id]
+  subnet_ids = [for subnet in aws_subnet.private : subnet.id]
 
   dynamic "ingress" {
     for_each = var.private_nacl_rules == {} ? local.defaults["private_nacl_rules"]["inbound"] : lookup(var.private_nacl_rules, "inbound", [])
@@ -41,7 +41,7 @@ resource "aws_network_acl" "public" {
   count = var.private_subnets_only ? 0 : 1
 
   vpc_id     = aws_vpc.vpc.id
-  subnet_ids = [for subnet in aws_subnet.public_subnets : subnet.id]
+  subnet_ids = [for subnet in aws_subnet.public : subnet.id]
 
   dynamic "ingress" {
     for_each = var.public_nacl_rules == {} ? local.defaults["public_nacl_rules"]["inbound"] : lookup(var.public_nacl_rules, "inbound", [])
