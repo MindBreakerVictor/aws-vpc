@@ -1,7 +1,7 @@
 module "flow_log" {
   count = var.flow_logs_config != null ? 1 : 0
 
-  source = "./flow-log"
+  source = "./modules/flow-log"
 
   name_prefix = local.derived_prefix
 
