@@ -16,7 +16,7 @@ resource "aws_default_network_acl" "acl" {
 }
 
 resource "aws_default_security_group" "sg" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = local.vpc_id
 }
 
 resource "aws_default_route_table" "rtb" {

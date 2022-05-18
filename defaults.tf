@@ -2,7 +2,7 @@ locals {
   # Defaults used across the module
   defaults = {
     private_nacl_rules = {
-      inbound  = [
+      inbound = [
         # Allow all inbound traffic inside the VPC
         {
           rule_no    = 100
@@ -76,6 +76,7 @@ locals {
           action     = "allow"
         }
       ]
+
       outbound = [
         # Allow all TCP outbound
         {
@@ -88,8 +89,9 @@ locals {
         }
       ]
     }
-    public_nacl_rules  = {
-      inbound  = [
+
+    public_nacl_rules = {
+      inbound = [
         # Allow HTTP inbound traffic inside the VPC
         {
           rule_no    = 100
@@ -172,6 +174,7 @@ locals {
           action     = "allow"
         }
       ]
+
       outbound = [
         # Allow all TCP outbound
         {
@@ -186,7 +189,3 @@ locals {
     }
   }
 }
-
-# output "defaults" {
-#   value = local.defaults
-# }

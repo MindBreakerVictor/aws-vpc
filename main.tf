@@ -9,6 +9,8 @@ locals {
   ### Public locals - Used anywhere in the module
   derived_prefix = var.environment != "" ? "${var.name}-${var.environment}" : var.name
 
+  vpc_id = aws_vpc.vpc.id
+
   azs_count          = min(var.availability_zones_count, length(local._azs))
   availability_zones = slice(local._azs, 0, local.azs_count)
 
@@ -17,20 +19,14 @@ locals {
     id  = rtb.id
   }]
 
-  nat_gateways_count = {
-    one-az   = 1
-    failover = min(local.azs_count, 2)
-    ha       = local.azs_count
-  }
-
-  nat_gateway_azs = var.private_subnets_only ? [] : slice(local.availability_zones, 0, local.nat_gateways_count[var.nat_gateway_setup])
-
   service_gateway_endpoints = toset(["s3", "dynamodb"])
-  vpc_gateway_endpoints     = [for svc, endpoint in aws_vpc_endpoint.gateway : {
+
+  vpc_gateway_endpoints = [for svc, endpoint in aws_vpc_endpoint.gateway : {
     service = svc
     id      = endpoint.id
   }]
-  vpce_rtb_associations     = [for pair in setproduct(local.vpc_gateway_endpoints, local.private_route_tables) : {
+
+  vpce_rtb_associations = [for pair in setproduct(local.vpc_gateway_endpoints, local.private_route_tables) : {
     service = pair[0].service
     rtb     = pair[1].key
 

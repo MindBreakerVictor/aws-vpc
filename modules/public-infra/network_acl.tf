@@ -1,9 +1,11 @@
-resource "aws_network_acl" "private" {
-  vpc_id     = local.vpc_id
-  subnet_ids = [for subnet in aws_subnet.private : subnet.id]
+resource "aws_network_acl" "public" {
+  count = var.mode != "public" ? 0 : 1
+
+  vpc_id     = var.vpc_id
+  subnet_ids = [for subnet in aws_subnet.public : subnet.id]
 
   dynamic "ingress" {
-    for_each = var.private_nacl_rules == {} ? local.defaults.private_nacl_rules.inbound : lookup(var.private_nacl_rules, "inbound", [])
+    for_each = lookup(var.network_acl_rules, "inbound", [])
     iterator = rule
 
     content {
@@ -19,7 +21,7 @@ resource "aws_network_acl" "private" {
   }
 
   dynamic "egress" {
-    for_each = var.private_nacl_rules == {} ? local.defaults.private_nacl_rules.outbound : lookup(var.private_nacl_rules, "outbound", [])
+    for_each = lookup(var.network_acl_rules, "outbound", [])
     iterator = rule
 
     content {
@@ -34,5 +36,5 @@ resource "aws_network_acl" "private" {
     }
   }
 
-  tags = merge(var.tags, { Name = "${local.derived_prefix}-private-nacl" })
+  tags = merge(var.tags, { Name = "${var.derived_prefix}-public-nacl" })
 }

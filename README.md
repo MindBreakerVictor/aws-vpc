@@ -20,6 +20,14 @@ Terraform module for creating and managing AWS Virtual Private Cloud (VPC).
   - [x] Gateway endpoints for S3 & DynamoDB services
   - [ ] Interface endpoints for supported AWS services
 - [x] Flow logs
+- [ ] Terraform docs
 - [ ] Multiple IPv4 CIDR blocks support
 - [ ] IPv6 support
 - [ ] Unit tests using Golang & GitHub Pipelines
+
+## Test scenarios
+
+- Update from private-only VPC to public with 1, 2 or multi-AZ NAT Gateways and all combinations. Total cases: 6 + 2 + 2 + 2
+- Update NACL rules. Total cases: 3
+- Update private-only VPC to use or not IGW. Total cases: 2
+- Disable/enable flow logs. Switch between destinations in flow logs. Total cases: 6

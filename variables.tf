@@ -73,7 +73,8 @@ Supported algorithms:
 * equalsplit - The subnets will be split equally - ie. same prefix length
                This will result in unused subnet addresses when the number of requested subnets is not a power of 2.
 EOF
-  default     = "nowaste"
+
+  default = "nowaste"
 
   validation {
     condition     = contains(["nowaste", "equalsplit"], var.subnetting_algorithm)
@@ -89,7 +90,7 @@ variable "private_subnets_only" {
 
 # Network ACLs
 variable "private_nacl_rules" {
-  type        = any  # Terraform doesn't yet support optional attributes in objects
+  type        = any # Terraform doesn't yet support optional attributes in objects
   description = "Inbound & outbound Network ACL rules for private subnets."
   default     = {}
 
@@ -108,7 +109,7 @@ variable "private_nacl_rules" {
 }
 
 variable "public_nacl_rules" {
-  type        = any  # Terraform doesn't yet support optional attributes in objects
+  type        = any # Terraform doesn't yet support optional attributes in objects
   description = "Inbound & outbound Network ACL rules for public subnets."
   default     = {}
 }
@@ -133,31 +134,67 @@ variable "force_internet_gateway" {
 
 # VPC Flow Logs
 variable "flow_logs_config" {
-  type        = any  # Because map values have different types.
+  # type        = object({
+  #   destination          = string
+  #   retention            = optional(number)
+  #   aggregation_interval = optional(number)
+  #   kms_key_id           = optional(string)
+  #   s3_tiering           = optional(object({
+  #     archive_access      = optional(number)
+  #     deep_archive_access = optional(number)
+  #   }))
+  # })
+  type        = any # Because map values have different types.
   description = <<EOF
 Config block for VPC Flow Logs. It must be a map with the following optional keys: destination, retention, aggregation_interval, kms_key_id.
 
-Keys values:
+Properties allowed values:
   destination          => "cloud-watch-logs" or "s3"
                           Default: "cloud-watch-logs"
   retention            => 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653, 0 (indefinetely)
                           Default: 30 (days)
+                          Valid only for CloudWatch destination
   aggregation_interval => 60 or 600
                           Default: 600
   kms_key_id           => ARN of a CMK in AWS KMS
                           Default: AWS managed key
+  s3_tiering           => configuration for S3 Intelligent-Tiering
+                          Default: Archive access after 90 days & Deep Archive Access after 180 days
+                          Pass this as `null` or with both properties set to 0 to disable S3 Intelligent-Tiering
+    archive_access       => Days after which data is tiered to ARCHIVE_ACCESS
+                            Default: 90
+                            Pass as 0 to disable ARCHIVE_ACCESS tiering
+    deep_archive_access  => Days after which data is tiered to DEEP_ARCHIVE_ACCESS
+                            Default: 180
+                            Pass as 0 to disable DEEP_ARCHIVE_ACCESS tiering
 
-Pass this as null to disable flow logs.
+Pass the variable as null to disable flow logs.
 EOF
-  default     = {}
+
+  default = {} #null
 
   validation {
-    condition     = length([
+    condition = length([
       for k in keys(var.flow_logs_config) : true
       if contains(["destination", "retention", "aggregation_interval", "kms_key_id"], k)
     ]) == length(var.flow_logs_config)
     error_message = "Invalid key present in flow logs config."
   }
+
+  # validation {
+  #   condition     = contains(["cloud-watch-logs", "s3"], var.flow_logs_config.destination)
+  #   error_message = "VPC flow logs destination must be either cloud-watch-logs or s3."
+  # }
+
+  # validation {
+  #   condition     = try(contains([1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653, 0], var.flow_logs_config.retention), true)
+  #   error_message = "Invalid retention period for VPC flow logs in CloudWatch destination."
+  # }
+
+  # validation {
+  #   condition     = try(contains([60, 600], var.flow_logs_config.aggregation_interval), true)
+  #   error_message = "Invalid aggregation interval for VPC flow logs."
+  # }
 }
 
 variable "tags" {

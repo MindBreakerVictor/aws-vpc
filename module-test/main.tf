@@ -36,7 +36,7 @@ module "vpc_six_azs" {
   }
 }
 
-module "vpc_ireland" {
+module "vpc_frankfurt" {
   source = "../"
 
   name                     = "modtest"
@@ -51,7 +51,7 @@ module "vpc_ireland" {
   tags = local.common_tags
 
   providers = {
-    aws = aws.ireland
+    aws = aws.frankfurt
   }
 }
 
@@ -65,56 +65,3 @@ locals {
     User = "victor611@yahoo.com"
   }
 }
-
-# Outputs
-# output "nv_azs_count" {
-#   value = module.vpc.azs_count
-# }
-
-output "nv_private_subnet_addresses" {
-  value = local.nv_vpc ? module.vpc.private_subnet_addresses : []
-}
-
-output "nv_public_subnet_addresses" {
-  value = local.nv_vpc ? module.vpc.public_subnet_addresses : []
-}
-
-output "nv_unused_subnet_addresses" {
-  value = local.nv_vpc ? module.vpc.unused_subnet_addresses : []
-}
-
-# output "six_azs_azs_count" {
-#   value = module.vpc_six_azs.azs_count
-# }
-
-output "six_azs_private_subnet_addresses" {
-  value = local.nv_six_azs_vpc ? module.vpc_six_azs.private_subnet_addresses : []
-}
-
-output "six_azs_public_subnet_addresses" {
-  value = local.nv_six_azs_vpc ? module.vpc_six_azs.public_subnet_addresses : []
-}
-
-output "six_azs_unused_subnet_addresses" {
-  value = local.nv_six_azs_vpc ? module.vpc_six_azs.unused_subnet_addresses : []
-}
-
-# output "ireland_azs_count" {
-#   value = module.vpc_ireland.azs_count
-# }
-
-output "ireland_private_subnet_addresses" {
-  value = module.vpc_ireland.private_subnet_addresses
-}
-
-output "ireland_public_subnet_addresses" {
-  value = module.vpc_ireland.public_subnet_addresses
-}
-
-output "ireland_unused_subnet_addresses" {
-  value = module.vpc_ireland.unused_subnet_addresses
-}
-
-# output "defaults" {
-#   value = module.vpc_ireland.defaults
-# }

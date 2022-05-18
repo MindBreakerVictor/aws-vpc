@@ -1,7 +1,7 @@
 resource "aws_vpc_endpoint" "gateway" {
   for_each = local.service_gateway_endpoints
 
-  vpc_id            = aws_vpc.vpc.id
+  vpc_id            = local.vpc_id
   service_name      = "com.amazonaws.${data.aws_region.current.name}.${each.key}"
   vpc_endpoint_type = "Gateway"
 

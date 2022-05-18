@@ -33,6 +33,14 @@ variable "retention_in_days" {
   }
 }
 
+variable "s3_tiering" {
+  type        = object({
+    archive_access      = number
+    deep_archive_access = number
+  })
+  description = "Configuration of S3 Intelligent-Tiering when VPC flow logs are stored in S3."
+}
+
 variable "kms_key_id" {
   type        = string
   description = "AWS KMS' CMK id, to be used for encrypting the VPC Flow Logs. Set to null to use AWS managed keys."
