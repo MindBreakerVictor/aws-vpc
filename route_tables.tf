@@ -13,8 +13,5 @@ resource "aws_route" "nat" {
 
   route_table_id         = each.value.id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = (contains(["one-az", "failover"], var.nat_gateway_setup) ?
-    module.public_infra.nat_gateways_ids[local.availability_zones[0]] :
-    module.public_infra.nat_gateways_ids[each.key]
-  )
+  nat_gateway_id         = var.nat_gateway_setup == "ha" ? module.public_infra.nat_gateways_ids[each.key] : module.public_infra.nat_gateways_ids[local.availability_zones[0]]
 }

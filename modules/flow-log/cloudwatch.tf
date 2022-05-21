@@ -1,32 +1,3 @@
-data "aws_iam_policy_document" "vpc_flow_logs" {
-  statement {
-    effect = "Allow"
-
-    principals {
-      type        = "Service"
-      identifiers = ["vpc-flow-logs.amazonaws.com"]
-    }
-
-    actions = ["sts:AssumeRole"]
-  }
-}
-
-data "aws_iam_policy_document" "cw" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-      "logs:DescribeLogGroups",
-      "logs:DescribeLogStreams"
-    ]
-
-    resources = ["*"]
-  }
-}
-
 resource "aws_iam_role" "cw" {
   count = var.logs_destination == "cloud-watch-logs" ? 1 : 0
 

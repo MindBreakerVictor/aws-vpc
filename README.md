@@ -21,9 +21,10 @@ Terraform module for creating and managing AWS Virtual Private Cloud (VPC).
   - [ ] Interface endpoints for supported AWS services
 - [x] Flow logs
 - [ ] Terraform docs
+- [ ] Unit tests using Golang & GitHub Actions
+- [ ] Run tfsec & checkov within GitHub Actions
 - [ ] Multiple IPv4 CIDR blocks support
 - [ ] IPv6 support
-- [ ] Unit tests using Golang & GitHub Pipelines
 
 ## Test scenarios
 

@@ -34,7 +34,7 @@ variable "retention_in_days" {
 }
 
 variable "s3_tiering" {
-  type        = object({
+  type = object({
     archive_access      = number
     deep_archive_access = number
   })
