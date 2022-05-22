@@ -1,35 +1,45 @@
 locals {
   subnets_count = var.availability_zones * (var.private_subnets_only ? 1 : 2)
 
-  smallest_bits_to_extend_the_prefix               = floor(log(local.subnets_count, 2)) # Greatest value N for which 2 ^ N is smaller than the number of subnets
-  greatest_bits_to_extend_the_prefix               = ceil(log(local.subnets_count, 2)) # Smallest value N for which 2 ^ N is bigger than the number of subnets
-  greatest_power_of_two_smaller_than_subnets_count = pow(2, local.smallest_bits_to_extend_the_prefix)
-  smallest_power_of_two_greater_than_subnets_count = pow(2, local.greatest_bits_to_extend_the_prefix)
+  # nowaste
+  nowaste_smallest_bits_to_extend_prefix = floor(log(local.subnets_count, 2)) # Greatest value N for which 2 ^ N < local.subnets_count
 
-  biggest_cidr_blocks = [
-    for netnum in range(0, local.greatest_power_of_two_smaller_than_subnets_count) :
-    cidrsubnet(var.ipv4_cidr_block, local.smallest_bits_to_extend_the_prefix, netnum)
+  ## Step 1
+  nowaste_initial_cidr_blocks = [
+    for netnum in range(0, pow(2, local.nowaste_smallest_bits_to_extend_prefix)) :
+    cidrsubnet(var.ipv4_cidr_block, local.nowaste_smallest_bits_to_extend_prefix, netnum)
   ]
 
-  # After the initial equal split of VPC IPv4 CIDR block if we don't have enough subnet addresses for each subnet,
-  # we split, starting from the end of the initial list, further to get enough subnet addresses for each subnet.
-  # The result is reversed so the IPv4 CIDR blocks remain in order.
-  cidr_blocks_to_split = reverse(slice(reverse(local.biggest_cidr_blocks), 0, local.subnets_count - length(local.biggest_cidr_blocks)))
+  ## Step 2
+  nowaste_last_cidr_blocks_to_split = reverse(slice(reverse(local.nowaste_initial_cidr_blocks), 0, local.subnets_count - length(local.nowaste_initial_cidr_blocks)))
+  nowaste_last_cidr_blocks_splitted = flatten([for net in local.nowaste_last_cidr_blocks_to_split : cidrsubnets(net, 1, 1)])
 
-  # Subnet addresses to be used for creating VPC subnets
-  subnet_addresses = var.subnetting_algorithm == "nowaste" ? concat(
-    slice(local.biggest_cidr_blocks, 0, length(local.biggest_cidr_blocks) - length(local.cidr_blocks_to_split)),
-    flatten([for cidr_block in local.cidr_blocks_to_split : cidrsubnets(cidr_block, 1, 1)])
-  ) : [
-    for netnum in range(0, local.subnets_count) : cidrsubnet(var.ipv4_cidr_block, local.greatest_bits_to_extend_the_prefix, netnum)
+  ## Final
+  nowaste_subnet_addresses = concat(
+    slice(local.nowaste_initial_cidr_blocks, 0, length(local.nowaste_initial_cidr_blocks) - length(local.nowaste_last_cidr_blocks_to_split)),
+    local.nowaste_last_cidr_blocks_splitted
+  )
+
+  # equalsplit
+
+  ## Step 1
+  equalsplit_biggest_bits_to_extend_prefix = ceil(log(local.subnets_count, 2)) # Smallest value N for which 2 ^ N > local.subnets_count
+  equalsplit_possible_subnets              = pow(2, local.equalsplit_biggest_bits_to_extend_prefix)
+
+  ## Final
+  equalsplit_subnet_addresses = [
+    for netnum in range(0, local.subnets_count) :
+    cidrsubnet(var.ipv4_cidr_block, local.equalsplit_biggest_bits_to_extend_prefix, netnum)
   ]
 
+  equalsplit_unused_subnet_addresses = [
+    for netnum in range(local.subnets_count, local.equalsplit_possible_subnets) :
+    cidrsubnet(var.ipv4_cidr_block, local.equalsplit_biggest_bits_to_extend_prefix, netnum)
+  ]
+
+  # Outputs
+  subnet_addresses         = var.subnetting_algorithm == "nowaste" ? local.nowaste_subnet_addresses : local.equalsplit_subnet_addresses
   private_subnet_addresses = slice(local.subnet_addresses, 0, var.availability_zones)
   public_subnet_addresses  = slice(local.subnet_addresses, var.availability_zones, length(local.subnet_addresses))
-
-  # Unused subnet addresses - when algorithm is "equalsplit"
-  unused_subnet_addresses = var.subnetting_algorithm == "nowaste" ? [] : [
-    for netnum in range(length(local.subnet_addresses), local.smallest_power_of_two_greater_than_subnets_count) :
-    cidrsubnet(var.ipv4_cidr_block, local.greatest_bits_to_extend_the_prefix, netnum)
-  ]
+  unused_subnet_addresses  = var.subnetting_algorithm == "nowaste" ? [] : local.equalsplit_unused_subnet_addresses
 }
