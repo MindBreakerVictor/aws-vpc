@@ -10,7 +10,7 @@ jobs:
         with:
           go-version-file: test/go.mod
       - uses: hashicorp/setup-terraform@v2
-      - uses: terraform-linters/tflint@v1
+      - uses: terraform-linters/setup-tflint@v1
 
       - name: Terraform validate & format 
         run: |
