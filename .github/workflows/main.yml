@@ -1,0 +1,37 @@
+name: verify
+on: push
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version-file: test/go.mod
+      - uses: hashicorp/setup-terraform@v2
+      - uses: terraform-linter/tflint@v1
+
+      - name: Terraform validate & format 
+        run: |
+          terraform validate
+          terraform fmt -check
+
+      - name: tflint
+        run: |
+          tflint .
+
+      - name: tfsec
+        run: |
+          go install github.com/aquasecurity/tfsec/cmd/tfsec@latest
+          tfsec . --exclude-downloaded-modules
+
+      - name: tfdocs
+        run: |
+          # Install
+          curl -Lo ./terraform-docs.tar.gz https://github.com/terraform-docs/terraform-docs/releases/download/v0.16.0/terraform-docs-v0.16.0-$(uname)-amd64.tar.gz
+          tar -xzf terraform-docs.tar.gz -C /usr/local/bin terraform-docs
+          rm -f ./terraform-docs.tar.gz
+
+          # Execute
+          terraform-docs . && git diff --exit-code README.md

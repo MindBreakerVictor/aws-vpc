@@ -1,0 +1,16 @@
+ormatter: markdown
+
+output:
+  file: README.md
+
+sections:
+  hide:
+    - data-sources
+    - resources
+    - header
+    - footer
+
+sort:
+  enabled: false
+
+version: ">= 0.15.0, < 1.0"
