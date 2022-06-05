@@ -11,7 +11,7 @@ locals {
   azs_count = length(local.azs)
 
   nat_gateways_count = {
-    one-az   = 1
+    one-az   = min(local.azs_count, 1)
     failover = min(local.azs_count, 2)
     ha       = local.azs_count
   }

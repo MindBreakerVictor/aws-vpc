@@ -117,7 +117,7 @@ variable "public_nacl_rules" {
 # NAT Gateways & Internet Gateway
 variable "nat_gateway_setup" {
   type        = string
-  description = "NAT Gateway setup. Available options: failover, ha"
+  description = "NAT Gateway setup. Available options: one-az, failover, ha"
   default     = "ha"
 
   validation {
@@ -174,10 +174,10 @@ EOF
   default = {} #null
 
   validation {
-    condition = length([
+    condition = try(length([
       for k in keys(var.flow_logs_config) : true
       if contains(["destination", "retention", "aggregation_interval", "kms_key_id"], k)
-    ]) == length(var.flow_logs_config)
+    ]) == length(var.flow_logs_config), var.flow_logs_config == null)
     error_message = "Invalid key present in flow logs config."
   }
 

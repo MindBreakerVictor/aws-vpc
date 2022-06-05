@@ -1,6 +1,11 @@
 data "aws_region" "current" {}
 
-data "aws_availability_zones" "available" {}
+data "aws_availability_zones" "available" {
+  filter {
+    name   = "zone-type"
+    values = ["availability-zone"]
+  }
+}
 
 locals {
   ### Private locals - Helpers for defining other locals
