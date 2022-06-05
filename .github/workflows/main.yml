@@ -1,5 +1,10 @@
 name: verify
-on: push
+on:
+  push:
+    branches-ignore:
+      - master
+    tags-ignore:
+      - '*'
 
 jobs:
   verify:

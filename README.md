@@ -20,8 +20,11 @@
   - [x] Gateway endpoints for S3 & DynamoDB services
   - [ ] Interface endpoints for supported AWS services
 - [x] Flow logs
-- [ ] Multiple IPv4 CIDR blocks support
 - [ ] IPv6 support
+- [ ] Multiple IPv4 & IPv6 CIDR blocks support via BYOIP pools
+- [ ] Multiple IPv4 & IPv6 CIDR blocks via IPAM pools (Amazon IP Address Manager)
+- [ ] Local Zones support
+- [ ] Wavelength Zones support
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -61,7 +64,7 @@
 | <a name="input_private_subnets_only"></a> [private\_subnets\_only](#input\_private\_subnets\_only) | Whether to create only private subnets from VPC IPv4 CIDR block. | `bool` | `false` | no |
 | <a name="input_private_nacl_rules"></a> [private\_nacl\_rules](#input\_private\_nacl\_rules) | Inbound & outbound Network ACL rules for private subnets. | `any` | `{}` | no |
 | <a name="input_public_nacl_rules"></a> [public\_nacl\_rules](#input\_public\_nacl\_rules) | Inbound & outbound Network ACL rules for public subnets. | `any` | `{}` | no |
-| <a name="input_nat_gateway_setup"></a> [nat\_gateway\_setup](#input\_nat\_gateway\_setup) | NAT Gateway setup. Available options: failover, ha | `string` | `"ha"` | no |
+| <a name="input_nat_gateway_setup"></a> [nat\_gateway\_setup](#input\_nat\_gateway\_setup) | NAT Gateway setup. Available options: one-az, failover, ha | `string` | `"ha"` | no |
 | <a name="input_force_internet_gateway"></a> [force\_internet\_gateway](#input\_force\_internet\_gateway) | Force creation of an Internet Gateway for a VPC with only private subnets. Required if an AWS Global Accelerator is pointing to a private resource in the VPC. | `bool` | `false` | no |
 | <a name="input_flow_logs_config"></a> [flow\_logs\_config](#input\_flow\_logs\_config) | Config block for VPC Flow Logs. It must be a map with the following optional keys: destination, retention, aggregation\_interval, kms\_key\_id.<br><br>Properties allowed values:<br>  destination          => "cloud-watch-logs" or "s3"<br>                          Default: "cloud-watch-logs"<br>  retention            => 1, 3, 5, 7, 14, 30, 60, 90, 120, 150, 180, 365, 400, 545, 731, 1827, 3653, 0 (indefinetely)<br>                          Default: 30 (days)<br>                          Valid only for CloudWatch destination<br>  aggregation\_interval => 60 or 600<br>                          Default: 600<br>  kms\_key\_id           => ARN of a CMK in AWS KMS<br>                          Default: AWS managed key<br>  s3\_tiering           => configuration for S3 Intelligent-Tiering<br>                          Default: Archive access after 90 days & Deep Archive Access after 180 days<br>                          Pass this as `null` or with both properties set to 0 to disable S3 Intelligent-Tiering<br>    archive\_access       => Days after which data is tiered to ARCHIVE\_ACCESS<br>                            Default: 90<br>                            Pass as 0 to disable ARCHIVE\_ACCESS tiering<br>    deep\_archive\_access  => Days after which data is tiered to DEEP\_ARCHIVE\_ACCESS<br>                            Default: 180<br>                            Pass as 0 to disable DEEP\_ARCHIVE\_ACCESS tiering<br><br>Pass the variable as null to disable flow logs. | `any` | `{}` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Common tags for all resources created by this module. Reserved tag keys: Name, net/type | `map(string)` | n/a | yes |

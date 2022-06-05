@@ -23,9 +23,9 @@ variable "subnetting_algorithm" {
   description = <<EOF
 Algorithm type for subnetting the VPC IPv4 CIDR blocks.
 Supported algorithms:
-* nowaste - Use the whole CIDR block, leaving no subnet addresses unused.
-            It attempts an equal split. When the number of subnets is not a power of 2, the last subnets will have bigger prefix lengths
-            Ie. Less usable host IPs
+* nowaste    - Use the whole CIDR block, leaving no subnet addresses unused.
+               It attempts an equal split. When the number of subnets is not a power of 2, the last subnets will have bigger prefix lengths
+               Ie. Less usable host IPs
 * equalsplit - The subnets will be split equally - ie. same prefix length
                This will result in unused subnet addresses when the number of requested subnets is not a power of 2.
 EOF
