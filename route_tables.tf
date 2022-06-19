@@ -8,6 +8,13 @@ resource "aws_route_table" "private" {
   })
 }
 
+resource "aws_route_table_association" "private" {
+  for_each = aws_subnet.private
+
+  subnet_id      = each.value.id
+  route_table_id = !var.private_subnets_only && var.nat_gateway_setup == "ha" ? aws_route_table.private[each.key].id : aws_route_table.private["private"].id
+}
+
 resource "aws_route" "nat" {
   for_each = var.private_subnets_only ? {} : aws_route_table.private
 
