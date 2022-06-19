@@ -20,7 +20,7 @@ jobs:
       - name: Terraform validate & format 
         run: |
           # terraform validate
-          terraform fmt -check
+          terraform fmt -check -recursive -diff
 
       - name: tflint
         run: |
