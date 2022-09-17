@@ -76,6 +76,25 @@ EOF
   }
 }
 
+variable "subnets" {
+  type = object({
+    private = list(string)
+    public  = list(string)
+  })
+
+  description = <<EOT
+List of IPv4 CIDR blocks to use for each subnet, both private and public.
+The # of subnets created is not decide by the length of the `private` & `public` lists, but rather the value of `availability_zones_count`,
+but no more than the number of AZs available in the AWS Region where the VPC is created.
+ie. min(var.availability_zones_count, length(data.aws_availability_zones.available.names))
+
+If `private_subnets_only` is `true`, the `public` list can be passed as null or empty list.
+By default, this variables is `null`, which means the subnets are computed by the internal algorithms, controlled by `subnetting_algorithm` variable.
+EOT
+
+  default = null
+}
+
 variable "private_subnets_only" {
   type        = bool
   description = "Whether to create only private subnets from VPC IPv4 CIDR block."

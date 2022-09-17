@@ -10,7 +10,7 @@ module "public_infra" {
 
   azs_cidr_blocks = {
     for i in range(0, length(module.subnet_addresses.public_subnet_addresses)) :
-    local.availability_zones[i] => module.subnet_addresses.public_subnet_addresses[i]
+    local.availability_zones[i] => local.custom_subnetting ? var.subnets.public[i] : module.subnet_addresses.public_subnet_addresses[i]
   }
 
   nat_gateway_setup = var.nat_gateway_setup
