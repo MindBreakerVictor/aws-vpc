@@ -151,6 +151,7 @@ Properties allowed values:
                           Valid only for CloudWatch destination
   aggregation_interval => 60 or 600
                           Default: 600
+  log_format           => Check AWS documentation
   kms_key_id           => ARN of a CMK in AWS KMS
                           Default: AWS managed key
   s3_tiering           => configuration for S3 Intelligent-Tiering
@@ -171,7 +172,7 @@ EOF
   validation {
     condition = try(length([
       for k in keys(var.flow_logs_config) : true
-      if contains(["destination", "retention", "aggregation_interval", "kms_key_id"], k)
+      if contains(["destination", "retention", "aggregation_interval", "log_format", "kms_key_id", "s3_tiering"], k)
     ]) == length(var.flow_logs_config), var.flow_logs_config == null)
     error_message = "Invalid key present in flow logs config."
   }
