@@ -1,9 +1,9 @@
 resource "aws_route_table" "public" {
   count = var.mode != "public" ? 0 : 1
 
-  vpc_id = var.vpc_id
+  vpc_id = var.vpc.id
 
-  tags = merge(var.tags, { Name = "${var.derived_prefix}-public-rtb" })
+  tags = merge(var.tags, { Name = "${var.vpc.name}-public" })
 }
 
 resource "aws_route_table_association" "public" {

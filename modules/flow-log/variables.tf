@@ -1,16 +1,10 @@
-variable "name_prefix" {
-  type        = string
-  description = "VPC name prefix. Usually local.derived_prefix from parent module."
-}
+variable "vpc" {
+  type = object({
+    id   = string
+    name = string
+  })
 
-variable "vpc_id" {
-  type        = string
-  description = "VPC ID to create Flow Logs for."
-
-  validation {
-    condition     = length(regexall("^vpc-(?:[0-9a-f]{8}|[0-9a-f]{17})$", var.vpc_id)) > 0
-    error_message = "Invalid VPC ID."
-  }
+  description = "VPC ID & name."
 }
 
 variable "logs_destination" {

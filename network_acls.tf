@@ -34,5 +34,5 @@ resource "aws_network_acl" "private" {
     }
   }
 
-  tags = merge(var.tags, { Name = "${local.derived_prefix}-private-nacl" })
+  tags = merge(var.tags, { Name = "${var.name}-private" })
 }

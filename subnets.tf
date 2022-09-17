@@ -22,7 +22,7 @@ resource "aws_subnet" "private" {
   assign_ipv6_address_on_creation = var.ipv6_cidr_block
 
   tags = merge(var.tags, {
-    Name        = "${local.derived_prefix}-private-${each.value["index"]}"
+    Name        = "${var.name}-private-${each.value["index"]}"
     NetworkType = "private"
   })
 }

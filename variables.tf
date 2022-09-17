@@ -4,12 +4,6 @@ variable "name" {
   description = "VPC name."
 }
 
-variable "environment" {
-  type        = string
-  description = "Name of the environment for which the VPC is used. Leave empty if no environment name is desired."
-  default     = ""
-}
-
 # VPC
 variable "main_cidr_block" {
   type        = string

@@ -5,7 +5,7 @@ resource "aws_vpc_endpoint" "gateway" {
   service_name      = "com.amazonaws.${data.aws_region.current.name}.${each.key}"
   vpc_endpoint_type = "Gateway"
 
-  tags = merge(var.tags, { Name = "${local.derived_prefix}-${each.key}-gw-endpoint" })
+  tags = merge(var.tags, { Name = "${var.name}-${each.key}-gateway" })
 }
 
 resource "aws_vpc_endpoint_route_table_association" "gateway" {

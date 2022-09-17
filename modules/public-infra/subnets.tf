@@ -6,14 +6,14 @@ resource "aws_subnet" "public" {
     }
   }
 
-  vpc_id            = var.vpc_id
+  vpc_id            = var.vpc.id
   cidr_block        = each.value["cidr_block"]
   availability_zone = each.key
 
   # assign_ipv6_address_on_creation = var.ipv6_cidr_block
 
   tags = merge(var.tags, {
-    Name        = "${var.derived_prefix}-public-${each.value["index"]}"
+    Name        = "${var.vpc.name}-public-${each.value["index"]}"
     NetworkType = "public"
   })
 }

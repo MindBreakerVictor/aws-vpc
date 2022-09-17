@@ -53,7 +53,6 @@
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_name"></a> [name](#input\_name) | VPC name. | `string` | n/a | yes |
-| <a name="input_environment"></a> [environment](#input\_environment) | Name of the environment for which the VPC is used. Leave empty if no environment name is desired. | `string` | `""` | no |
 | <a name="input_main_cidr_block"></a> [main\_cidr\_block](#input\_main\_cidr\_block) | Main IPv4 CIDR block for the VPC. | `string` | n/a | yes |
 | <a name="input_instance_tenancy"></a> [instance\_tenancy](#input\_instance\_tenancy) | Tenancy of instances launched into the VPC. Dedicated or host tenancy cost at least 2$/h. | `string` | `"default"` | no |
 | <a name="input_enable_dns_support"></a> [enable\_dns\_support](#input\_enable\_dns\_support) | Whether to enable DNS support in the VPC. | `bool` | `true` | no |

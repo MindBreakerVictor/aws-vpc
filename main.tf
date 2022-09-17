@@ -12,8 +12,6 @@ locals {
   _azs = data.aws_availability_zones.available.names
 
   ### Public locals - Used anywhere in the module
-  derived_prefix = var.environment != "" ? "${var.name}-${var.environment}" : var.name
-
   vpc_id = aws_vpc.vpc.id
 
   azs_count          = min(var.availability_zones_count, length(local._azs))
