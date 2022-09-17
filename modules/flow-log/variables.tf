@@ -62,6 +62,12 @@ variable "max_aggregation_interval" {
   }
 }
 
+variable "log_format" {
+  type        = string
+  description = "The fields to include in the flow log record, in the order in which they should appear."
+  default     = null
+}
+
 variable "tags" {
   type = map(string)
 }

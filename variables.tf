@@ -138,6 +138,7 @@ variable "flow_logs_config" {
   #   destination          = string
   #   retention            = optional(number)
   #   aggregation_interval = optional(number)
+  #   log_format           = optional(string)
   #   kms_key_id           = optional(string)
   #   s3_tiering           = optional(object({
   #     archive_access      = optional(number)

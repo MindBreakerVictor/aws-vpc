@@ -6,6 +6,8 @@ resource "aws_flow_log" "vpc_flow_logs" {
 
   iam_role_arn = var.logs_destination == "cloud-watch-logs" ? aws_iam_role.cw[0].arn : null
 
+  log_format = var.log_format
+
   max_aggregation_interval = var.max_aggregation_interval
 
   tags = local.tags
