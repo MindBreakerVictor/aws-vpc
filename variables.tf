@@ -4,12 +4,6 @@ variable "name" {
   description = "VPC name."
 }
 
-variable "environment" {
-  type        = string
-  description = "Name of the environment for which the VPC is used. Leave empty if no environment name is desired."
-  default     = ""
-}
-
 # VPC
 variable "main_cidr_block" {
   type        = string
@@ -82,6 +76,25 @@ EOF
   }
 }
 
+variable "subnets" {
+  type = object({
+    private = list(string)
+    public  = list(string)
+  })
+
+  description = <<EOT
+List of IPv4 CIDR blocks to use for each subnet, both private and public.
+The # of subnets created is not decide by the length of the `private` & `public` lists, but rather the value of `availability_zones_count`,
+but no more than the number of AZs available in the AWS Region where the VPC is created.
+ie. min(var.availability_zones_count, length(data.aws_availability_zones.available.names))
+
+If `private_subnets_only` is `true`, the `public` list can be passed as null or empty list.
+By default, this variables is `null`, which means the subnets are computed by the internal algorithms, controlled by `subnetting_algorithm` variable.
+EOT
+
+  default = null
+}
+
 variable "private_subnets_only" {
   type        = bool
   description = "Whether to create only private subnets from VPC IPv4 CIDR block."
@@ -138,6 +151,7 @@ variable "flow_logs_config" {
   #   destination          = string
   #   retention            = optional(number)
   #   aggregation_interval = optional(number)
+  #   log_format           = optional(string)
   #   kms_key_id           = optional(string)
   #   s3_tiering           = optional(object({
   #     archive_access      = optional(number)
@@ -156,6 +170,7 @@ Properties allowed values:
                           Valid only for CloudWatch destination
   aggregation_interval => 60 or 600
                           Default: 600
+  log_format           => Check AWS documentation
   kms_key_id           => ARN of a CMK in AWS KMS
                           Default: AWS managed key
   s3_tiering           => configuration for S3 Intelligent-Tiering
@@ -176,7 +191,7 @@ EOF
   validation {
     condition = try(length([
       for k in keys(var.flow_logs_config) : true
-      if contains(["destination", "retention", "aggregation_interval", "kms_key_id"], k)
+      if contains(["destination", "retention", "aggregation_interval", "log_format", "kms_key_id", "s3_tiering"], k)
     ]) == length(var.flow_logs_config), var.flow_logs_config == null)
     error_message = "Invalid key present in flow logs config."
   }

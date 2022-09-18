@@ -1,8 +1,8 @@
 resource "aws_s3_bucket" "vpc_flow_logs" {
   count = var.logs_destination == "s3" ? 1 : 0
 
-  bucket = local.name
-  tags   = local.tags
+  bucket = "${var.vpc.name}-vpc-flow-logs-${local.region}"
+  tags   = merge(var.tags, { Name = "${var.vpc.name}-vpc-flow-logs-${local.region}" })
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "vpc_flow_logs" {

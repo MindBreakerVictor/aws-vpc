@@ -1,6 +1,10 @@
-variable "derived_prefix" {
-  type        = string
-  description = "Common prefix for resource naming."
+variable "vpc" {
+  type = object({
+    id   = string
+    name = string
+  })
+
+  description = "VPC ID & name."
 }
 
 variable "mode" {
@@ -16,11 +20,6 @@ EOF
     condition     = contains(["none", "igw-only", "public"], var.mode)
     error_message = "Public infrastructure module mode must be one of: none, igw-only, public."
   }
-}
-
-variable "vpc_id" {
-  type        = string
-  description = "VPC ID from the root module."
 }
 
 variable "azs_cidr_blocks" {

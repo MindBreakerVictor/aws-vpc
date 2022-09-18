@@ -11,7 +11,7 @@ resource "aws_subnet" "private" {
   for_each = {
     for i in range(0, local.azs_count) : local.availability_zones[i] => {
       index      = i + 1
-      cidr_block = module.subnet_addresses.private_subnet_addresses[i]
+      cidr_block = local.custom_subnetting ? var.subnets.private[i] : module.subnet_addresses.private_subnet_addresses[i]
     }
   }
 
@@ -22,7 +22,7 @@ resource "aws_subnet" "private" {
   assign_ipv6_address_on_creation = var.ipv6_cidr_block
 
   tags = merge(var.tags, {
-    Name        = "${local.derived_prefix}-private-${each.value["index"]}"
+    Name        = "${var.name}-private-${each.value["index"]}"
     NetworkType = "private"
   })
 }

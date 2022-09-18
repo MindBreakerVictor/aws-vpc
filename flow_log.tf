@@ -3,12 +3,15 @@ module "flow_log" {
 
   source = "./modules/flow-log"
 
-  name_prefix = local.derived_prefix
+  vpc = {
+    id   = local.vpc_id
+    name = var.name
+  }
 
-  vpc_id                   = local.vpc_id
   logs_destination         = lookup(var.flow_logs_config, "destination", "cloud-watch-logs")
   retention_in_days        = lookup(var.flow_logs_config, "retention", 30)
   max_aggregation_interval = lookup(var.flow_logs_config, "aggregation_interval", 600)
+  log_format               = lookup(var.flow_logs_config, "log_format", null)
   kms_key_id               = lookup(var.flow_logs_config, "kms_key_id", null)
 
   s3_tiering = lookup(var.flow_logs_config, "s3_tiering", {

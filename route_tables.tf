@@ -4,7 +4,7 @@ resource "aws_route_table" "private" {
   vpc_id = local.vpc_id
 
   tags = merge(var.tags, {
-    Name = format("%s-private-rtb%s", local.derived_prefix, !var.private_subnets_only && var.nat_gateway_setup == "ha" ? "-${each.key}" : "")
+    Name = format("%s-private%s", var.name, !var.private_subnets_only && var.nat_gateway_setup == "ha" ? "-${each.key}" : "")
   })
 }
 

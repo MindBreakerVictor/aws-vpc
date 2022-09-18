@@ -1,7 +1,7 @@
 resource "aws_network_acl" "public" {
   count = var.mode != "public" ? 0 : 1
 
-  vpc_id     = var.vpc_id
+  vpc_id     = var.vpc.id
   subnet_ids = [for subnet in aws_subnet.public : subnet.id]
 
   dynamic "ingress" {
@@ -36,5 +36,5 @@ resource "aws_network_acl" "public" {
     }
   }
 
-  tags = merge(var.tags, { Name = "${var.derived_prefix}-public-nacl" })
+  tags = merge(var.tags, { Name = "${var.vpc.name}-public" })
 }

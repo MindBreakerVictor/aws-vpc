@@ -1,9 +1,9 @@
 resource "aws_internet_gateway" "igw" {
   count = var.mode != "none" ? 1 : 0
 
-  vpc_id = var.vpc_id
+  vpc_id = var.vpc.id
 
-  tags = merge(var.tags, { Name = "${var.derived_prefix}-igw" })
+  tags = merge(var.tags, { Name = "${var.vpc.name}" })
 }
 
 locals {
