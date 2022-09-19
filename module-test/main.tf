@@ -48,6 +48,11 @@ module "vpc_frankfurt" {
   nat_gateway_setup    = var.nat_gateway_setup
   flow_logs_config     = var.flow_logs_config
 
+  subnets = {
+    private = ["10.0.2.0/27", "10.0.2.32/27", "10.0.2.64/27"]
+    public  = ["10.0.2.96/27", "10.0.2.128/27", "10.0.2.160/27"]
+  }
+
   tags = local.common_tags
 
   providers = {

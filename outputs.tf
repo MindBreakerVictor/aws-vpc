@@ -12,19 +12,21 @@ output "subnets" {
         route_table_id    = try(aws_route_table.private[az].id, aws_route_table.private["private"].id)
       }
     }
+
+    public = module.public_infra.subnets
   }
 
   description = "Map of both private & public subnets with IP CIDR block, associated route table & network ACL IDs as properties."
 }
 
 output "private_subnet_addresses" {
-  value = module.subnet_addresses.private_subnet_addresses
+  value = local.custom_subnetting ? var.subnets.private : module.subnet_addresses.private_subnet_addresses
 }
 
 output "public_subnet_addresses" {
-  value = module.subnet_addresses.public_subnet_addresses
+  value = local.custom_subnetting ? var.subnets.public : module.subnet_addresses.public_subnet_addresses
 }
 
 output "unused_subnet_addresses" {
-  value = module.subnet_addresses.unused_subnet_addresses
+  value = local.custom_subnetting ? null : module.subnet_addresses.unused_subnet_addresses
 }

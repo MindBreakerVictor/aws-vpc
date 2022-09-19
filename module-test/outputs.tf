@@ -1,35 +1,32 @@
-output "nv_private_subnet_addresses" {
-  value = local.nv_vpc ? module.vpc.private_subnet_addresses : []
+output "nv" {
+  value = !local.nv_vpc ? null : {
+    vpc_id  = module.vpc[0].vpc_id
+    subnets = module.vpc[0].subnets
+
+    private_subnet_addresses = module.vpc[0].private_subnet_addresses
+    public_subnet_addresses  = module.vpc[0].public_subnet_addresses
+    unused_subnet_addresses  = module.vpc[0].unused_subnet_addresses
+  }
 }
 
-output "nv_public_subnet_addresses" {
-  value = local.nv_vpc ? module.vpc.public_subnet_addresses : []
+output "six_azs" {
+  value = !local.nv_six_azs_vpc ? null : {
+    vpc_id  = module.vpc_six_azs[0].vpc_id
+    subnets = module.vpc_six_azs[0].subnets
+
+    private_subnet_addresses = module.vpc_six_azs[0].private_subnet_addresses
+    public_subnet_addresses  = module.vpc_six_azs[0].public_subnet_addresses
+    unused_subnet_addresses  = module.vpc_six_azs[0].unused_subnet_addresses
+  }
 }
 
-output "nv_unused_subnet_addresses" {
-  value = local.nv_vpc ? module.vpc.unused_subnet_addresses : []
-}
+output "frankfurt" {
+  value = {
+    vpc_id  = module.vpc_frankfurt.vpc_id
+    subnets = module.vpc_frankfurt.subnets
 
-output "six_azs_private_subnet_addresses" {
-  value = local.nv_six_azs_vpc ? module.vpc_six_azs.private_subnet_addresses : []
-}
-
-output "six_azs_public_subnet_addresses" {
-  value = local.nv_six_azs_vpc ? module.vpc_six_azs.public_subnet_addresses : []
-}
-
-output "six_azs_unused_subnet_addresses" {
-  value = local.nv_six_azs_vpc ? module.vpc_six_azs.unused_subnet_addresses : []
-}
-
-output "frankfurt_private_subnet_addresses" {
-  value = module.vpc_frankfurt.private_subnet_addresses
-}
-
-output "frankfurt_public_subnet_addresses" {
-  value = module.vpc_frankfurt.public_subnet_addresses
-}
-
-output "frankfurt_unused_subnet_addresses" {
-  value = module.vpc_frankfurt.unused_subnet_addresses
+    private_subnet_addresses = module.vpc_frankfurt.private_subnet_addresses
+    public_subnet_addresses  = module.vpc_frankfurt.public_subnet_addresses
+    unused_subnet_addresses  = module.vpc_frankfurt.unused_subnet_addresses
+  }
 }
