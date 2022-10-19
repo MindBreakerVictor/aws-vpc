@@ -102,29 +102,10 @@ variable "private_subnets_only" {
 }
 
 # Network ACLs
-variable "private_nacl_rules" {
-  type        = any # Terraform doesn't yet support optional attributes in objects
-  description = "Inbound & outbound Network ACL rules for private subnets."
-  default     = {}
-
-  # validation {
-  #   condition     = (var.private_nacl_rules == {} ||
-  #     (length(lookup(var.private_nacl_rules, "ingress", [])) > 0 && length([
-  #       for rule in var.private_nacl_rules["ingress"] : true
-  #       if length([
-  #         for key
-  #       ]) == length(keys(rule))
-  #     ]) == length(var.private_nacl_rules["ingress"])) ||
-  #     (length(lookup(var.private_nacl_rules, "egress", [])) > 0 && true)
-  #   )
-  #   error_message = "value"
-  # }
-}
-
-variable "public_nacl_rules" {
-  type        = any # Terraform doesn't yet support optional attributes in objects
-  description = "Inbound & outbound Network ACL rules for public subnets."
-  default     = {}
+variable "empty_network_acls" {
+  type        = bool
+  description = "Do not create default allow all traffic rule in network ACLs."
+  default     = false
 }
 
 # NAT Gateways & Internet Gateway

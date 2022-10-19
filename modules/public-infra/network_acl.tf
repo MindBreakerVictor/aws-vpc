@@ -4,37 +4,19 @@ resource "aws_network_acl" "public" {
   vpc_id     = var.vpc.id
   subnet_ids = [for subnet in aws_subnet.public : subnet.id]
 
-  dynamic "ingress" {
-    for_each = lookup(var.network_acl_rules, "inbound", [])
-    iterator = rule
-
-    content {
-      rule_no    = rule.value["rule_no"]
-      protocol   = rule.value["protocol"]
-      from_port  = rule.value["from_port"]
-      to_port    = rule.value["to_port"]
-      icmp_type  = lookup(rule.value, "icmp_type", null)
-      icmp_code  = lookup(rule.value, "icmp_code", null)
-      cidr_block = rule.value["cidr_block"]
-      action     = rule.value["action"]
-    }
-  }
-
-  dynamic "egress" {
-    for_each = lookup(var.network_acl_rules, "outbound", [])
-    iterator = rule
-
-    content {
-      rule_no    = rule.value["rule_no"]
-      protocol   = rule.value["protocol"]
-      from_port  = rule.value["from_port"]
-      to_port    = rule.value["to_port"]
-      icmp_type  = lookup(rule.value, "icmp_type", null)
-      icmp_code  = lookup(rule.value, "icmp_code", null)
-      cidr_block = rule.value["cidr_block"]
-      action     = rule.value["action"]
-    }
-  }
-
   tags = merge(var.tags, { Name = "${var.vpc.name}-public" })
+}
+
+resource "aws_network_acl_rule" "public" {
+  for_each = toset(var.mode != "public" || var.empty_network_acl ? [] : ["ingress", "egress"])
+
+  network_acl_id = aws_network_acl.public[0].id
+  egress         = each.key == "egress"
+
+  rule_number = 100
+  protocol    = "all" # tfsec:ignore:aws-ec2-no-excessive-port-access
+  from_port   = 0
+  to_port     = 0
+  cidr_block  = "0.0.0.0/0" # tfsec:ignore:aws-ec2-no-public-ingress-acl
+  rule_action = "allow"
 }

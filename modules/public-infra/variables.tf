@@ -37,9 +37,9 @@ variable "nat_gateway_setup" {
   }
 }
 
-variable "network_acl_rules" {
-  type        = any # Terraform doesn't yet support optional attributes in objects
-  description = "Inbound & outbound Network ACL rules for public subnets."
+variable "empty_network_acl" {
+  type        = bool
+  description = "Do not create default allow all traffic rule in network ACL."
 }
 
 variable "tags" {
