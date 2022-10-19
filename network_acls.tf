@@ -1,8 +1,14 @@
 resource "aws_network_acl" "private" {
-  vpc_id     = local.vpc_id
-  subnet_ids = [for subnet in aws_subnet.private : subnet.id]
+  vpc_id = local.vpc_id
 
   tags = merge(var.tags, { Name = "${var.name}-private" })
+}
+
+resource "aws_network_acl_association" "private" {
+  for_each = aws_subnet.private
+
+  subnet_id      = each.value.id
+  network_acl_id = aws_network_acl.private.id
 }
 
 resource "aws_network_acl_rule" "private" {

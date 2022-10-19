@@ -126,6 +126,13 @@ variable "force_internet_gateway" {
   default     = false
 }
 
+# VPC Endpoints
+variable "create_vpc_gateway_endpoints" {
+  type        = bool
+  description = "Create VPC Endpoints (Gateway) for S3 & DynamoDB services."
+  default     = true
+}
+
 # VPC Flow Logs
 variable "flow_logs_config" {
   # type        = object({
