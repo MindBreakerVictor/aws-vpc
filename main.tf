@@ -24,7 +24,7 @@ locals {
     id  = rtb.id
   }]
 
-  service_gateway_endpoints = toset(["s3", "dynamodb"])
+  service_gateway_endpoints = toset(var.create_vpc_gateway_endpoints ? ["s3", "dynamodb"] : [])
 
   vpc_gateway_endpoints = [for svc, endpoint in aws_vpc_endpoint.gateway : {
     service = svc

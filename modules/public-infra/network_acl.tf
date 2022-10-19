@@ -1,10 +1,16 @@
 resource "aws_network_acl" "public" {
   count = var.mode != "public" ? 0 : 1
 
-  vpc_id     = var.vpc.id
-  subnet_ids = [for subnet in aws_subnet.public : subnet.id]
+  vpc_id = var.vpc.id
 
   tags = merge(var.tags, { Name = "${var.vpc.name}-public" })
+}
+
+resource "aws_network_acl_association" "public" {
+  for_each = aws_subnet.public
+
+  subnet_id      = each.value.id
+  network_acl_id = aws_network_acl.public[0].id
 }
 
 resource "aws_network_acl_rule" "public" {

@@ -43,10 +43,11 @@ module "vpc_frankfurt" {
   main_cidr_block          = "10.0.2.0/24"
   availability_zones_count = 6
 
-  subnetting_algorithm = var.subnetting_algorithm
-  private_subnets_only = var.private_subnets_only
-  nat_gateway_setup    = var.nat_gateway_setup
-  flow_logs_config     = var.flow_logs_config
+  subnetting_algorithm         = var.subnetting_algorithm
+  private_subnets_only         = var.private_subnets_only
+  nat_gateway_setup            = var.nat_gateway_setup
+  create_vpc_gateway_endpoints = var.create_vpc_gateway_endpoints
+  flow_logs_config             = var.flow_logs_config
 
   subnets = {
     private = ["10.0.2.0/27", "10.0.2.32/27", "10.0.2.64/27"]
