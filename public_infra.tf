@@ -15,7 +15,7 @@ module "public_infra" {
 
   nat_gateway_setup = var.nat_gateway_setup
 
-  network_acl_rules = var.public_nacl_rules == {} ? local.defaults.public_nacl_rules : var.public_nacl_rules
+  empty_network_acl = var.empty_network_acls
 
   tags = var.tags
 }
