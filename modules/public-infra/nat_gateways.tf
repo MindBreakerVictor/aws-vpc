@@ -3,7 +3,7 @@ resource "aws_eip" "nat" {
 
   for_each = toset(local.nat_gateway_azs)
 
-  vpc = true
+  domain = "vpc"
 
   tags = merge(var.tags, { Name = "${var.vpc.name}-nat-eip-${each.value}" })
 }
