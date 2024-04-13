@@ -1,6 +1,6 @@
 module github.com/vtstanescu/aws-vpc
 
-go 1.18
+go 1.19
 
 require (
 	github.com/gruntwork-io/terratest v0.40.10
